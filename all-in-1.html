@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-In-One App - Weather, Todo, Quiz, Expense Tracker & Notes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="app-title">🎯 All-In-One App</h1>
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeToggle" title="Toggle dark/light mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <button class="tab-btn active" data-tab="weather">
+                <i class="fas fa-cloud-sun"></i>
+                <span>Weather</span>
+            </button>
+            <button class="tab-btn" data-tab="todos">
+                <i class="fas fa-check-circle"></i>
+                <span>Todos</span>
+            </button>
+            <button class="tab-btn" data-tab="quiz">
+                <i class="fas fa-brain"></i>
+                <span>Quiz</span>
+            </button>
+            <button class="tab-btn" data-tab="expenses">
+                <i class="fas fa-chart-pie"></i>
+                <span>Expenses</span>
+            </button>
+            <button class="tab-btn" data-tab="notes">
+                <i class="fas fa-sticky-note"></i>
+                <span>Notes</span>
+            </button>
+        </nav>
+
+        <!-- Content Area -->
+        <main class="main-content">
+            <!-- Weather App -->
+            <section class="tab-content active" id="weather">
+                <div class="weather-container">
+                    <div class="weather-search">
+                        <input type="text" id="cityInput" placeholder="Search city..." class="search-input">
+                        <button id="searchBtn" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                        <button id="geoBtn" class="btn btn-secondary">
+                            <i class="fas fa-location-dot"></i> My Location
+                        </button>
+                    </div>
+                    <div id="weatherDisplay" class="weather-display"></div>
+                    <div id="forecastDisplay" class="forecast-display"></div>
+                </div>
+            </section>
+
+            <!-- Todo App -->
+            <section class="tab-content" id="todos">
+                <div class="todos-container">
+                    <div class="todo-input-section">
+                        <input type="text" id="todoInput" placeholder="Add a new task..." class="todo-input">
+                        <input type="datetime-local" id="todoDeadline" class="todo-deadline">
+                        <select id="todoPriority" class="todo-priority">
+                            <option value="low">Low Priority</option>
+                            <option value="medium" selected>Medium Priority</option>
+                            <option value="high">High Priority</option>
+                        </select>
+                        <button id="addTodoBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Task
+                        </button>
+                    </div>
+
+                    <div class="todo-stats">
+                        <div class="stat-card">
+                            <span class="stat-label">Total Tasks</span>
+                            <span class="stat-value" id="totalTasks">0</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">Completed</span>
+                            <span class="stat-value" id="completedTasks">0</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">High Priority</span>
+                            <span class="stat-value" id="highPriorityTasks">0</span>
+                        </div>
+                    </div>
+
+                    <div class="todo-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="active">Active</button>
+                        <button class="filter-btn" data-filter="completed">Completed</button>
+                        <button class="filter-btn" data-filter="high">High Priority</button>
+                    </div>
+
+                    <div id="todosList" class="todos-list"></div>
+                </div>
+            </section>
+
+            <!-- Quiz App -->
+            <section class="tab-content" id="quiz">
+                <div class="quiz-container">
+                    <div id="quizStart" class="quiz-start">
+                        <h2>📚 Choose a Quiz Category</h2>
+                        <div class="quiz-categories">
+                            <button class="category-btn" data-category="general">
+                                <i class="fas fa-globe"></i>
+                                <span>General Knowledge</span>
+                            </button>
+                            <button class="category-btn" data-category="science">
+                                <i class="fas fa-flask"></i>
+                                <span>Science</span>
+                            </button>
+                            <button class="category-btn" data-category="history">
+                                <i class="fas fa-scroll"></i>
+                                <span>History</span>
+                            </button>
+                            <button class="category-btn" data-category="geography">
+                                <i class="fas fa-map"></i>
+                                <span>Geography</span>
+                            </button>
+                            <button class="category-btn" data-category="technology">
+                                <i class="fas fa-laptop"></i>
+                                <span>Technology</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="quizContent" class="quiz-content" style="display: none;">
+                        <div class="quiz-header">
+                            <div class="quiz-progress">
+                                <span id="questionNumber">Question 1 of 10</span>
+                                <div class="progress-bar">
+                                    <div id="progressFill" class="progress-fill"></div>
+                                </div>
+                            </div>
+                            <div class="quiz-timer">
+                                <i class="fas fa-hourglass-end"></i>
+                                <span id="timer">60</span>s
+                            </div>
+                        </div>
+
+                        <div class="quiz-question">
+                            <h3 id="questionText"></h3>
+                        </div>
+
+                        <div class="quiz-options" id="optionsContainer"></div>
+
+                        <div class="quiz-nav">
+                            <button id="quizPrevBtn" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button id="quizNextBtn" class="btn btn-primary">
+                                Next <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="quizResults" class="quiz-results" style="display: none;">
+                        <div class="results-content">
+                            <h2>Quiz Complete! 🎉</h2>
+                            <div class="score-circle">
+                                <div class="score-text">
+                                    <span id="finalScore">0</span>
+                                    <span class="score-total">/100</span>
+                                </div>
+                            </div>
+                            <p id="resultMessage" class="result-message"></p>
+                            <div class="results-stats">
+                                <div class="result-stat">
+                                    <span class="label">Correct Answers</span>
+                                    <span class="value" id="correctAnswers">0</span>
+                                </div>
+                                <div class="result-stat">
+                                    <span class="label">Wrong Answers</span>
+                                    <span class="value" id="wrongAnswers">0</span>
+                                </div>
+                                <div class="result-stat">
+                                    <span class="label">Accuracy</span>
+                                    <span class="value" id="accuracy">0%</span>
+                                </div>
+                            </div>
+                            <button id="retakeBtn" class="btn btn-primary">
+                                <i class="fas fa-redo"></i> Retake Quiz
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Expense Tracker -->
+            <section class="tab-content" id="expenses">
+                <div class="expenses-container">
+                    <div class="expense-input-section">
+                        <input type="number" id="expenseAmount" placeholder="Amount" class="expense-input" min="0" step="0.01">
+                        <select id="expenseCategory" class="expense-category">
+                            <option value="income">💰 Income</option>
+                            <option value="food">🍔 Food</option>
+                            <option value="transport">🚗 Transport</option>
+                            <option value="utilities">💡 Utilities</option>
+                            <option value="entertainment">🎬 Entertainment</option>
+                            <option value="shopping">🛍️ Shopping</option>
+                            <option value="health">🏥 Health</option>
+                            <option value="other">📋 Other</option>
+                        </select>
+                        <input type="date" id="expenseDate" class="expense-date">
+                        <input type="text" id="expenseDescription" placeholder="Description" class="expense-input">
+                        <button id="addExpenseBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
+
+                    <div class="expense-stats">
+                        <div class="stat-card balance">
+                            <span class="stat-label">Balance</span>
+                            <span class="stat-value" id="balanceAmount">$0.00</span>
+                        </div>
+                        <div class="stat-card income">
+                            <span class="stat-label">Income</span>
+                            <span class="stat-value" id="incomeAmount">$0.00</span>
+                        </div>
+                        <div class="stat-card expense">
+                            <span class="stat-label">Expenses</span>
+                            <span class="stat-value" id="expenseAmount2">$0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="expense-chart-container">
+                        <canvas id="expenseChart"></canvas>
+                    </div>
+
+                    <div class="expense-filter">
+                        <input type="month" id="expenseMonth" class="expense-month">
+                        <button id="clearExpensesBtn" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Clear All
+                        </button>
+                    </div>
+
+                    <div id="expensesList" class="expenses-list"></div>
+                </div>
+            </section>
+
+            <!-- Notes App -->
+            <section class="tab-content" id="notes">
+                <div class="notes-container">
+                    <div class="notes-header">
+                        <input type="text" id="notesSearch" placeholder="Search notes..." class="notes-search">
+                        <button id="addNoteBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> New Note
+                        </button>
+                    </div>
+
+                    <div class="notes-stats">
+                        <div class="stat-card">
+                            <span class="stat-label">Total Notes</span>
+                            <span class="stat-value" id="totalNotes">0</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">Characters</span>
+                            <span class="stat-value" id="totalCharacters">0</span>
+                        </div>
+                    </div>
+
+                    <div id="notesList" class="notes-list"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
